@@ -12,7 +12,7 @@ public class KebabApplication extends Application {
     @NonNull
     private final DataSource dataSource;
 
-    public KebabApplication(DataSource dataSource) {
+    public KebabApplication() {
         this.dataSource = new DataSource();
     }
 
