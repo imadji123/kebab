@@ -1,6 +1,7 @@
 package com.imadji.kebab.ui;
 
 import com.imadji.kebab.data.DataSource;
+import com.imadji.kebab.data.model.Kebab;
 import com.imadji.kebab.data.model.Lettuce;
 import com.imadji.kebab.data.model.TomatoSlice;
 import com.imadji.kebab.data.model.Tortilla;
@@ -68,6 +69,34 @@ public class KebabViewModelTest {
 
         testObserver.assertNoErrors();
         testObserver.assertValue(LETTUCE);
+    }
+
+    @Test
+    public void getKebabStream_emits_whenMeatIsFresh() {
+        new ArrangeBuilder()
+                .withTortilla(TORTILLA)
+                .withLettuce(LETTUCE)
+                .withTomatoSlice(TOMATO_SLICE);
+        TestObserver<Kebab>  testObserver = new TestObserver<>();
+        viewModel.getKebabStream().subscribeWith(testObserver);
+
+        viewModel.meatAvailable(true);
+
+        testObserver.assertValueCount(1);
+    }
+
+    @Test
+    public void getKebabStream_doesNotEmit_whenMeatIsNotFresh() {
+        new ArrangeBuilder()
+                .withTortilla(TORTILLA)
+                .withLettuce(LETTUCE)
+                .withTomatoSlice(TOMATO_SLICE);
+        TestObserver<Kebab>  testObserver = new TestObserver<>();
+        viewModel.getKebabStream().subscribeWith(testObserver);
+
+        viewModel.meatAvailable(false);
+
+        testObserver.assertNoValues();
     }
 
     private class ArrangeBuilder {
